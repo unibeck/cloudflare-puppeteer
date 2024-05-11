@@ -17,7 +17,7 @@ jobs:
         with:
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Set up Node.js
-        uses: actions/setup-node@v3.4.1
+        uses: actions/setup-node@v4.0.2
         with:
           node-version: 18.18
       - name: Install dependencies
