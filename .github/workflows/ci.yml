@@ -100,7 +100,7 @@ jobs:
         run: xvfb-run --auto-servernum npm run test:chrome
       - name: Run all Firefox tests (only on Linux)
         if: ${{ matrix.spec.name == 'Linux' }}
-        uses: nick-invision/retry@v2
+        uses: nick-invision/retry@v3
         with:
           command: xvfb-run --auto-servernum npm run test:firefox
           timeout_minutes: 20
