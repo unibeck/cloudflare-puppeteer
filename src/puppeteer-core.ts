@@ -17,7 +17,7 @@
 // import {initializePuppeteer} from './initializePuppeteer.js';
 import {Browser} from './common/Browser.js';
 import {BrowserWorker} from './common/BrowserWorker.js';
-import {Puppeteer} from './common/Puppeteer.js';
+import {ConnectOptions, Puppeteer} from './common/Puppeteer.js';
 import {WorkersWebSocketTransport} from './common/WorkersWebSocketTransport.js';
 
 export * from './common/NetworkConditions.js';
@@ -213,9 +213,107 @@ class PuppeteerWorkers extends Puppeteer {
       );
     }
   }
+
+  /**
+   * Establish a devtools connection to an existing session
+   *
+   * @param options - Set of configurable options to set on the browser.
+   * @returns a browser instance
+   */
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  public override async connectNative(
+    options: ConnectOptions
+  ): Promise<Browser> {
+    return super.connect(options);
+  }
+
+  /**
+   * Establish a devtools connection to an existing session
+   *
+   * @param ws - WebSocket instance
+   * @returns a browser instance
+   */
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  public override async connectWithWs(ws: WebSocket): Promise<Browser> {
+    const sessionId = 'test';
+    try {
+      const transport = await WorkersWebSocketTransport.createWithWs(
+        ws,
+        sessionId
+      );
+      return super.connect({transport, sessionId: sessionId});
+    } catch (e) {
+      throw new Error(
+        `Unable to connect to existing session ${sessionId} (it may still be in use or not ready yet) - retry or launch a new browser: ${e}`
+      );
+    }
+  }
+
+  /**
+   * Establish a devtools connection to an existing session
+   *
+   * @param browserWSEndpoint - WebSocket url
+   * @returns a browser instance
+   */
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  public override async connectWithWsEndpoint(
+    browserWSEndpoint: string
+  ): Promise<Browser> {
+    const sessionId = 'test';
+    try {
+      const transport = await WorkersWebSocketTransport.createWithWsEndpoint(
+        browserWSEndpoint,
+        sessionId
+      );
+      return super.connect({transport, sessionId: sessionId});
+    } catch (e) {
+      throw new Error(
+        `Unable to connect to existing session ${sessionId} (it may still be in use or not ready yet) - retry or launch a new browser: ${e}`
+      );
+    }
+  }
+
+  /**
+   * Establish a devtools connection to an existing session
+   *
+   * @param browserWSEndpoint - WebSocket url
+   * @returns a browser instance
+   */
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  public override async connectWithWsEndpointFetch(
+    browserWSEndpoint: string
+  ): Promise<Browser> {
+    const sessionId = 'test';
+    try {
+      const transport =
+        await WorkersWebSocketTransport.createWithWsEndpointFetch(
+          browserWSEndpoint,
+          sessionId
+        );
+      return super.connect({transport, sessionId: sessionId});
+    } catch (e) {
+      throw new Error(
+        `Unable to connect to existing session ${sessionId} (it may still be in use or not ready yet) - retry or launch a new browser: ${e}`
+      );
+    }
+  }
 }
 
 const puppeteer = new PuppeteerWorkers();
 export default puppeteer;
 
-export const {connect, launch, sessions, history, limits} = puppeteer;
+export const {
+  connect,
+  connectNative,
+  connectWithWs,
+  connectWithWsEndpoint,
+  connectWithWsEndpointFetch,
+  launch,
+  sessions,
+  history,
+  limits,
+} = puppeteer;

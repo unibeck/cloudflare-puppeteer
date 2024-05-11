@@ -1,0 +1,7 @@
+name = "websocket-browser-test"
+
+#https://developers.cloudflare.com/workers/configuration/compatibility-dates/#change-history
+compatibility_date = "2024-04-03"
+compatibility_flags = ["nodejs_compat"]
+
+main = "./index.ts"

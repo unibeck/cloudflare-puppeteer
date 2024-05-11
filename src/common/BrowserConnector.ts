@@ -113,6 +113,7 @@ export async function _connectToBrowser(
   const product = version.product.toLowerCase().includes('firefox')
     ? 'firefox'
     : 'chrome';
+  // const product = 'chrome';
 
   const {browserContextIds} = await connection.send(
     'Target.getBrowserContexts'

@@ -1,3 +1,31 @@
+# Fork of Cloudflare's fork of puppeteer
+This fork's purpose is to enabled connecting to a remote browser with websockets using a Cloudflare Worker. The Cloudflare
+fork is focused on supporting their Browser Rendering API. We use their fork as it has been updated to run on the Worker
+runtime (puppeteer is not natively compatible with the worker runtime).
+
+There are two specific callouts to the changes I have made in this fork
+1) Added `puppeteer.connectNative()`, which is a copy of the original puppeteer.connect() method that the Cloudflare fork removed
+
+2) These methods use Cloudflare's custom `WorkersWebSocketTransport` class, which seem to have special handling for websockets
+in the worker runtime. They all do very similar things, but are separate to help with flexibility
+- `puppeteer.connectWithWs()`: Pass in a websocket connection created in Cloudflare worker
+- `puppeteer.connectWithWsEndpoint()`: Pass in a websocket connection created in Cloudflare worker
+- `puppeteer.connectWithWsEndpointFetch()`: Pass in a websocket connection created in Cloudflare worker
+
+## Debugging
+It seems like the websockets are being closes very quickly after a connection is established. It is likely the special
+handling in `WorkersWebSocketTransport` is there to remediate this issue. However, this is not working as expected.
+
+I have provided an example Worker, `./worker/index.ts`, for testing. Run it with
+```bash
+npx wrangler dev --config worker/wrangler.toml --port 8789
+````
+and test it by calling
+```bash
+curl http://localhost:8789
+```
+____________________________________________________________________________________________
+
 # Workers version of Puppeteer Core
 
 This repo is a fork of main puppeteer project. It creates a version of

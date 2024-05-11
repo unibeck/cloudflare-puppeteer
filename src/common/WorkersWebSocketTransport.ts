@@ -22,6 +22,35 @@ export class WorkersWebSocketTransport implements ConnectionTransport {
     return new WorkersWebSocketTransport(response.webSocket!, sessionid);
   }
 
+  static async createWithWs(
+    ws: WebSocket,
+    sessionId: string
+  ): Promise<WorkersWebSocketTransport> {
+    return new WorkersWebSocketTransport(ws, sessionId);
+  }
+
+  static async createWithWsEndpoint(
+    browserWSEndpoint: string,
+    sessionId: string
+  ): Promise<WorkersWebSocketTransport> {
+    const websocket = new WebSocket(browserWSEndpoint);
+    websocket.accept();
+    console.log('websocket created');
+    return new WorkersWebSocketTransport(websocket, sessionId);
+  }
+
+  static async createWithWsEndpointFetch(
+    browserWSEndpoint: string,
+    sessionId: string
+  ): Promise<WorkersWebSocketTransport> {
+    const response = await fetch(browserWSEndpoint, {
+      headers: {Upgrade: 'websocket'},
+    });
+    response.webSocket!.accept();
+    console.log('websocket created');
+    return new WorkersWebSocketTransport(response.webSocket!, sessionId);
+  }
+
   constructor(ws: WebSocket, sessionid: string) {
     this.pingInterval = setInterval(() => {
       return this.ws.send('ping');
