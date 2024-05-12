@@ -5,21 +5,25 @@ import puppeteer from '../lib/esm/puppeteer/puppeteer-core.js';
 export default class extends WorkerEntrypoint {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   async fetch(_request: Request) {
-    const websocket: WebSocket | undefined = undefined;
+    let websocket: WebSocket | undefined = undefined;
     const BROWSERBASE_API_KEY = '';
+    const BROWSERLESS_API_KEY = '';
 
     try {
-      const wsUrl = `wss://connect.browserbase.com?apiKey=${BROWSERBASE_API_KEY}`;
-      // const httpUrl = `https://connect.browserbase.com?apiKey=${this.env.BROWSERBASE_API_KEY}`
+      // const wsUrl = `wss://connect.browserbase.com?apiKey=${BROWSERBASE_API_KEY}`;
+      const wsUrl = `wss://production-sfo.browserless.io?token=${BROWSERLESS_API_KEY}`;
       // console.log(`Connecting to wsUrl: ${wsUrl}`)
+
+      // const httpUrl = `https://connect.browserbase.com?apiKey=${this.env.BROWSERBASE_API_KEY}`
+      // const httpUrl = `https://production-sfo.browserless.io?token=${BROWSERLESS_API_KEY}`;
       // const response = await fetch(httpUrl, {
       //   headers: {Upgrade: 'websocket'},
       // });
-      // websocket = response.webSocket!
-      // websocket.accept()
+      // websocket = response.webSocket!;
+      // websocket.accept();
       //
-      // console.log(websocket)
-      // console.log(`websocket.url: ${websocket.url}`)
+      // console.log(websocket);
+      // console.log(`websocket.url: ${websocket.url}`);
       // console.log(response)
       // websocket = new WebSocket(wsUrl);
 
@@ -49,10 +53,6 @@ export default class extends WorkerEntrypoint {
         `https://www.chronogolf.com/login?returnUrl=${clubReturnUrl}`
       );
 
-      await new Promise(resolve => {
-        return setTimeout(resolve, 5000);
-      });
-
       // await Promise.all([
       //     page.goto(`https://www.chronogolf.com/login?returnUrl=${clubReturnUrl}`),
       //     page.waitForNavigation({ waitUntil: 'networkidle2' }),
@@ -61,14 +61,15 @@ export default class extends WorkerEntrypoint {
       console.log(`Logging in`);
 
       const email = await page.waitForSelector('#sessionEmail');
-      // await page.type('#sessionEmail', "Test")
+      await page.type('#sessionEmail', 'Test');
       console.log(email);
-      await page.screenshot();
+      const screenshot = (await page.screenshot()) as Buffer;
+
       // write this to a file
       await browser.close();
       console.log('browser closed');
 
-      return new Response('hi');
+      return new Response(screenshot);
     } catch (e) {
       console.error(e);
       // console.log(websocket)

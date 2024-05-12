@@ -28,6 +28,8 @@
     "node": ">=14.1.0"
   },
   "scripts": {
+    "dev:worker": "npx wrangler dev --config worker/wrangler.toml --port 8789",
+    "dev:worker:test": "curl http://localhost:8789",
     "test": "c8 --check-coverage --lines 93 run-s test:chrome:* test:firefox",
     "test:types": "tsd",
     "test:install": "scripts/test-install.sh",

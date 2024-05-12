@@ -18,11 +18,11 @@ handling in `WorkersWebSocketTransport` is there to remediate this issue. Howeve
 
 I have provided an example Worker, `./worker/index.ts`, for testing. Run it with
 ```bash
-npx wrangler dev --config worker/wrangler.toml --port 8789
+npm run dev:worker
 ````
 and test it by calling
 ```bash
-curl http://localhost:8789
+npm run dev:worker:test
 ```
 ____________________________________________________________________________________________
 
