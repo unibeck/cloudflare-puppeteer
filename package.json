@@ -71,7 +71,7 @@
   "author": "The Chromium Authors",
   "license": "Apache-2.0",
   "dependencies": {
-    "debug": "4.3.4",
+    "debug": "4.3.5",
     "devtools-protocol": "0.0.1019158",
     "events": "3.3.0",
     "stream": "0.0.2",
@@ -84,7 +84,7 @@
     "@microsoft/api-documenter": "7.19.4",
     "@microsoft/api-extractor": "7.29.2",
     "@microsoft/api-extractor-model": "7.23.0",
-    "@types/debug": "4.1.7",
+    "@types/debug": "4.1.12",
     "@types/diff": "5.0.2",
     "@types/mime": "3.0.1",
     "@types/mocha": "9.1.1",
